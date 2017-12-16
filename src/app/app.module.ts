@@ -11,6 +11,7 @@ import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SignupPage } from '../pages/signup/signup';
+import { SigninPage } from './../pages/signin/signin';
 
 import { UserService } from '../providers/user/user.service';
 import { AuthService } from '../providers/auth/auth.service';
@@ -26,7 +27,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
   declarations: [
     MyApp,
     HomePage,
-    SignupPage
+    SignupPage,
+    SigninPage
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseAppConfig),
@@ -38,7 +40,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
   entryComponents: [
     MyApp,
     HomePage,
-    SignupPage
+    SignupPage,
+    SigninPage
   ],
   providers: [
     StatusBar,
