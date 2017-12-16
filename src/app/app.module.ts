@@ -6,9 +6,11 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2/angularfire2';
 
+import { HttpModule } from '@angular/http';
+
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import {HttpModule} from "@angular/http";
+import { SignupPage } from '../pages/signup/signup';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -20,18 +22,20 @@ const firebaseAppConfig: FirebaseAppConfig = {
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    SignupPage
   ],
   imports: [
+    AngularFireModule.initializeApp(firebaseAppConfig),
     BrowserModule,
     HttpModule,
-    AngularFireModule.initializeApp(firebaseAppConfig),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    SignupPage
   ],
   providers: [
     StatusBar,
