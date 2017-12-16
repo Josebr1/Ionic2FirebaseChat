@@ -3,6 +3,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../../providers/user/user.service';
+import { AuthService } from '../../providers/auth/auth.service';
+import { User } from "../../models/user.model";
+
+import { FirebaseAuthState } from "angularfire2";
 
 @IonicPage()
 @Component({
@@ -13,7 +17,8 @@ export class SignupPage {
 
   signupForm: FormGroup;
 
-  constructor(public navCtrl: NavController,
+  constructor(public authService: AuthService,
+              public navCtrl: NavController,
               public navParams: NavParams,
               public formBuilder: FormBuilder,
               public userService: UserService) {
@@ -34,10 +39,19 @@ export class SignupPage {
 
   onSubmit(): void {
     console.log('Form submitted!');
-    this.userService.create(this.signupForm.value)
-      .then(() => {
-        console.log('User created!');
-      });
-  }
 
+    let user: User = this.signupForm.value;
+
+    this.authService.createAuthUser({
+      email: user.email,
+      password: user.password
+    }).then((authSate: FirebaseAuthState) => {
+
+      this.userService.create(this.signupForm.value)
+        .then(() => {
+          console.log('User created!');
+        });
+
+    });
+  }
 }
