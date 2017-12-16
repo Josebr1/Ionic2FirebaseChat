@@ -1,3 +1,4 @@
+import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -63,6 +64,7 @@ export class SignupPage {
             this.userService.create(formUser)
               .then(() => {
                 console.log('User created!');
+                this.navCtrl.setRoot(HomePage);
                 loading.dismiss();
               }).catch((error: any) => {
                 console.log(error);
