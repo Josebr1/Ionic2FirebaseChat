@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {AlertController, IonicPage, Loading, LoadingController, NavController, NavParams} from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../../providers/user/user.service';
@@ -16,10 +16,12 @@ export class SignupPage {
 
   signupForm: FormGroup;
 
-  constructor(public authService: AuthService,
+  constructor(public alertCtrl: AlertController,
+              public authService: AuthService,
               public navCtrl: NavController,
               public navParams: NavParams,
               public formBuilder: FormBuilder,
+              public loadingCtrl: LoadingController,
               public userService: UserService) {
 
     let emailRegex = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
@@ -39,6 +41,8 @@ export class SignupPage {
   onSubmit(): void {
     console.log('Form submitted!');
 
+    let loading: Loading = this.showLoading();
+
     let formUser = this.signupForm.value;
 
     this.authService.createAuthUser({
@@ -52,8 +56,34 @@ export class SignupPage {
       this.userService.create(formUser)
         .then(() => {
           console.log('User created!');
-        });
+          loading.dismiss();
+        }).catch((error: Error) => {
+          console.log(error);
+          loading.dismiss();
+          this.showAlert(error.message);
+      });
 
+    }).catch((error: Error) => {
+      console.log(error);
+      loading.dismiss();
+      this.showAlert(error.message);
     });
+  }
+
+  private showLoading(): Loading{
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
+
+    return loading;
+  }
+
+  private showAlert(message: string): void{
+    this.alertCtrl.create({
+      message: message,
+      buttons: ['OK']
+    }).present();
   }
 }
