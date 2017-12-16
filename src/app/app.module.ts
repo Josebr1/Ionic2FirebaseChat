@@ -15,6 +15,7 @@ import { SigninPage } from './../pages/signin/signin';
 
 import { UserService } from '../providers/user/user.service';
 import { AuthService } from '../providers/auth/auth.service';
+import { AuthProviders, AuthMethods } from 'angularfire2';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -22,6 +23,11 @@ const firebaseAppConfig: FirebaseAppConfig = {
   databaseURL: "https://ionic2-firebase-chat-38a04.firebaseio.com",
   storageBucket: "ionic2-firebase-chat-38a04.appspot.com",
 };
+
+const firebaseAuthConfig = {
+  provider: AuthProviders.Custom,
+  method: AuthMethods.Password
+}
 
 @NgModule({
   declarations: [
@@ -31,7 +37,7 @@ const firebaseAppConfig: FirebaseAppConfig = {
     SigninPage
   ],
   imports: [
-    AngularFireModule.initializeApp(firebaseAppConfig),
+    AngularFireModule.initializeApp(firebaseAppConfig, firebaseAuthConfig),
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp)
