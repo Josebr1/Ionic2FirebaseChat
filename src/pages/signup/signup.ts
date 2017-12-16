@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import {AlertController, IonicPage, Loading, LoadingController, NavController, NavParams} from 'ionic-angular';
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../../providers/user/user.service';
 import { AuthService } from '../../providers/auth/auth.service';
 
 import { FirebaseAuthState } from "angularfire2";
+
+import 'rxjs/add/operator/first';
 
 @IonicPage()
 @Component({
@@ -17,12 +19,12 @@ export class SignupPage {
   signupForm: FormGroup;
 
   constructor(public alertCtrl: AlertController,
-              public authService: AuthService,
-              public navCtrl: NavController,
-              public navParams: NavParams,
-              public formBuilder: FormBuilder,
-              public loadingCtrl: LoadingController,
-              public userService: UserService) {
+    public authService: AuthService,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public formBuilder: FormBuilder,
+    public loadingCtrl: LoadingController,
+    public userService: UserService) {
 
     let emailRegex = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
@@ -42,35 +44,45 @@ export class SignupPage {
     console.log('Form submitted!');
 
     let loading: Loading = this.showLoading();
-
     let formUser = this.signupForm.value;
+    let username: string = formUser.username;
 
-    this.authService.createAuthUser({
-      email: formUser.email,
-      password: formUser.password
-    }).then((authSate: FirebaseAuthState) => {
+    this.userService.userExists(username)
+      .first()
+      .subscribe((userExists: boolean) => {
 
-      delete formUser.password;
-      formUser.uid = authSate.auth.uid;
+        if (!userExists) {
+          this.authService.createAuthUser({
+            email: formUser.email,
+            password: formUser.password
+          }).then((authSate: FirebaseAuthState) => {
 
-      this.userService.create(formUser)
-        .then(() => {
-          console.log('User created!');
+            delete formUser.password;
+            formUser.uid = authSate.auth.uid;
+
+            this.userService.create(formUser)
+              .then(() => {
+                console.log('User created!');
+                loading.dismiss();
+              }).catch((error: any) => {
+                console.log(error);
+                loading.dismiss();
+                this.showAlert(error);
+              });
+
+          }).catch((error: any) => {
+            console.log(error);
+            loading.dismiss();
+            this.showAlert(error);
+          });
+        } else {
+          this.showAlert(`O username ${username} já está sendo usado em outra conta!`);
           loading.dismiss();
-        }).catch((error: any) => {
-          console.log(error);
-          loading.dismiss();
-          this.showAlert(error);
+        }
       });
-
-    }).catch((error: any) => {
-      console.log(error);
-      loading.dismiss();
-      this.showAlert(error);
-    });
   }
 
-  private showLoading(): Loading{
+  private showLoading(): Loading {
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -80,7 +92,7 @@ export class SignupPage {
     return loading;
   }
 
-  private showAlert(message: string): void{
+  private showAlert(message: string): void {
     this.alertCtrl.create({
       message: message,
       buttons: ['OK']
