@@ -16,6 +16,7 @@ import { SigninPage } from './../pages/signin/signin';
 import { UserService } from '../providers/user/user.service';
 import { AuthService } from '../providers/auth/auth.service';
 import { AuthProviders, AuthMethods } from 'angularfire2';
+import { CustomLoggedHeaderComponent } from '../components/custom-logged-header/custom-logged-header';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -34,7 +35,8 @@ const firebaseAuthConfig = {
     MyApp,
     HomePage,
     SignupPage,
-    SigninPage
+    SigninPage,
+    CustomLoggedHeaderComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseAppConfig, firebaseAuthConfig),
