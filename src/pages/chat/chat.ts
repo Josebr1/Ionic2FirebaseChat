@@ -1,3 +1,4 @@
+import { Message } from './../../models/message.model';
 import { MessageService } from './../../providers/message/message.service';
 import { ChatService } from './../../providers/chat/chat.service';
 import { FirebaseListObservable } from 'angularfire2';
@@ -8,6 +9,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 import { UserService } from '../../providers/user/user.service';
 import { Message } from '../../models/message.model';
 
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -60,7 +62,19 @@ export class ChatPage {
   }
 
   sendMessage(newMessage: string) {
-    this.messages.push(newMessage);
+    if (newMessage) {
+
+      let timestamp: object = firebase.database.ServerValue.TIMESTAMP;
+
+      this.messageService.create(
+        new Message(
+          this.sender.$key,
+          newMessage,
+          timestamp
+        ),
+        this.messages);
+
+    }
   }
 
 }
