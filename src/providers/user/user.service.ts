@@ -1,4 +1,4 @@
-import { FirebaseAuthState } from 'angularfire2';
+import { FirebaseAuthState, FirebaseListObservable } from 'angularfire2';
 import { User } from './../../models/user.model';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
@@ -60,6 +60,11 @@ export class UserService extends BaseService{
     }).map((users: User[]) => {
         return users.length > 0;
     }).catch(this.handleObservableError);
+  }
+
+  get(userId: string): FirebaseObjectObservable<User>{
+    return <FirebaseObjectObservable<User>> this.af.database.object(`/users/${userId}`)
+    .catch(this.handleObservableError);
   }
 
 }
