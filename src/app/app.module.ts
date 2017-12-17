@@ -21,6 +21,7 @@ import { AuthProviders, AuthMethods } from 'angularfire2';
 import { CustomLoggedHeaderComponent } from '../components/custom-logged-header/custom-logged-header';
 import { ChatService } from '../providers/chat/chat.service';
 import { MessageService } from '../providers/message/message.service';
+import { MessageBoxComponent } from '../components/message-box/message-box';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -42,7 +43,8 @@ const firebaseAuthConfig = {
     SigninPage,
     ChatPage,
     CustomLoggedHeaderComponent,
-    CapitalizePipe
+    CapitalizePipe,
+    MessageBoxComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseAppConfig, firebaseAuthConfig),
