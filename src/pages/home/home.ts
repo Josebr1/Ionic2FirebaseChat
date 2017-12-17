@@ -1,3 +1,4 @@
+import { User } from './../../models/user.model';
 import { Chat } from './../../models/chat.model';
 import { AuthService } from './../../providers/auth/auth.service';
 import { Component } from '@angular/core';
@@ -7,7 +8,6 @@ import { SignupPage } from '../signup/signup';
 
 import { FirebaseListObservable } from 'angularfire2';
 
-import { User } from '../../models/user.model';
 import { UserService } from '../../providers/user/user.service';
 import { ChatPage } from '../chat/chat';
 import { ChatService } from '../../providers/chat/chat.service';
@@ -20,6 +20,7 @@ import firebase from 'firebase';
 })
 export class HomePage {
 
+  chats: FirebaseListObservable<Chat[]>;
   users: FirebaseListObservable<User[]>;
   view: string = 'chats';
 
@@ -35,6 +36,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
+    this.chats = this.chatService.chats;
     this.users = this.userService.users;
   }
 
