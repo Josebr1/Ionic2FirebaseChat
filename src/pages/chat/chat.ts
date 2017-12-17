@@ -4,13 +4,14 @@ import { MessageService } from './../../providers/message/message.service';
 import { ChatService } from './../../providers/chat/chat.service';
 import { FirebaseListObservable } from 'angularfire2';
 import { User } from './../../models/user.model';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthService } from '../../providers/auth/auth.service';
 import { UserService } from '../../providers/user/user.service';
 import { Message } from '../../models/message.model';
 
 import firebase from 'firebase';
+import { Content } from 'ionic-angular/components/content/content';
 
 @IonicPage()
 @Component({
@@ -18,6 +19,8 @@ import firebase from 'firebase';
   templateUrl: 'chat.html',
 })
 export class ChatPage {
+
+  @ViewChild(Content) content: Content;
 
   messages: FirebaseListObservable<Message[]>;
   pageTitle: string;
@@ -50,8 +53,12 @@ export class ChatPage {
         this.chat1 = this.chatService.getDeepChat(this.sender.$key, this.recipient.$key);
         this.chat2 = this.chatService.getDeepChat(this.recipient.$key, this.sender.$key);
 
-
-        
+        let doSubcription = () => {
+          this.messages
+          .subscribe((message: Message[]) => {
+            this.scrollToBottom();
+          });
+        };
 
         this.messages = this.messageService
           .getMessages(this.sender.$key, this.recipient.$key);
@@ -65,6 +72,9 @@ export class ChatPage {
               this.messages = this.messageService
                 .getMessages(this.recipient.$key, this.sender.$key);
 
+                doSubcription();
+            }else{
+              doSubcription();
             }
 
           });
@@ -84,19 +94,27 @@ export class ChatPage {
         ),
         this.messages).then(() => {
           this.chat1
-          .update({
-            lastMessage: newMessage,
-            timestamp: currentTimestamp
-          });
+            .update({
+              lastMessage: newMessage,
+              timestamp: currentTimestamp
+            });
 
           this.chat2
-          .update({
-            lastMessage: newMessage,
-            timestamp: currentTimestamp
-          });
+            .update({
+              lastMessage: newMessage,
+              timestamp: currentTimestamp
+            });
         });
 
     }
+  }
+
+  private scrollToBottom(duration?: number): void {
+    setTimeout(() => {
+      if (this.content) {
+        this.content.scrollToBottom(duration || 300);
+      }
+    }, 50);
   }
 
 }
