@@ -52,26 +52,40 @@ export class HomePage {
       .first()
       .subscribe((currentUser: User) => {
         this.chatService.getDeepChat(currentUser.$key, recipientUser.$key)
-        .first()
-        .subscribe((chat: Chat) => {
-          console.log(chat);
+          .first()
+          .subscribe((chat: Chat) => {
+            console.log(chat);
 
-          if(chat.hasOwnProperty('$value')){
-            let timestamp: Object = firebase.database.ServerValue.TIMESTAMP;
+            if (chat.hasOwnProperty('$value')) {
+              let timestamp: Object = firebase.database.ServerValue.TIMESTAMP;
 
-            let chat1 = new Chat('', timestamp, recipientUser.name, '');
-            this.chatService.create(chat1, currentUser.$key, recipientUser.$key);
+              let chat1 = new Chat('', timestamp, recipientUser.name, '');
+              this.chatService.create(chat1, currentUser.$key, recipientUser.$key);
 
-            let chat2 = new Chat('', timestamp, currentUser.name, '');
-            this.chatService.create(chat2, recipientUser.$key, currentUser.$key);
-          }
+              let chat2 = new Chat('', timestamp, currentUser.name, '');
+              this.chatService.create(chat2, recipientUser.$key, currentUser.$key);
+            }
 
-        });
+          });
       });
 
     this.navCtrl.push(ChatPage, {
       recipientUser: recipientUser
     });
+  }
+
+  onChatOpen(chat: Chat): void {
+    let recipientUserId: string = chat.$key;
+
+    this.userService.get(recipientUserId)
+      .first()
+      .subscribe((user: User) => {
+
+        this.navCtrl.push(ChatPage, {
+          recipientUser: user
+        });
+
+      });
   }
 
 }

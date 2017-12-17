@@ -3,7 +3,7 @@ import { User } from './../../models/user.model';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 
 import { BaseService } from '../base/base.service';
 
