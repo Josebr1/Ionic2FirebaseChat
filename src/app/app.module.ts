@@ -20,6 +20,7 @@ import { AuthService } from '../providers/auth/auth.service';
 import { AuthProviders, AuthMethods } from 'angularfire2';
 import { CustomLoggedHeaderComponent } from '../components/custom-logged-header/custom-logged-header';
 import { ChatService } from '../providers/chat/chat.service';
+import { MessageService } from '../providers/message/message.service';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -63,7 +64,8 @@ const firebaseAuthConfig = {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserService,
     AuthService,
-    ChatService
+    ChatService,
+    MessageService
   ]
 })
 export class AppModule {}
