@@ -21,16 +21,26 @@ export class UserService extends BaseService{
               public http: Http) {
     super();
     console.log('Hello UserProvider Provider');
-
-    this.users = this.af.database.list(`/users`);
     this.listenAuthState();
+  }
+
+  private setUsers(uidToExclude: string): void{
+    this.users = <FirebaseListObservable<User[]>> this.af.database.list(`/users`, {
+      query: {
+        orderByChild: 'name'
+      }
+    }).map((users: User[]) => {
+      return users.filter((user: User) => user.$key !== uidToExclude)
+    });
   }
 
   private listenAuthState(): void{
     this.af.auth
     .subscribe((authState: FirebaseAuthState) => {
       if(authState){
+        console.log('Auth state alterado!');
         this.currentUser = this.af.database.object(`/users/${authState.auth.uid}`);
+        this.setUsers(authState.auth.uid);
       }
     });
   }
