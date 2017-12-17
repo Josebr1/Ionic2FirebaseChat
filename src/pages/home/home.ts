@@ -16,6 +16,7 @@ import { UserService } from '../../providers/user/user.service';
 export class HomePage {
 
   users: FirebaseListObservable<User[]>;
+  view: string = 'chats';
 
   constructor(public authService: AuthService, public navCtrl: NavController, public userService: UserService) {
 
