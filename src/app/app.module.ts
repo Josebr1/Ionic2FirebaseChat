@@ -1,3 +1,4 @@
+import { CapitalizePipe } from './../pipes/capitalize.pipe';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -36,7 +37,8 @@ const firebaseAuthConfig = {
     HomePage,
     SignupPage,
     SigninPage,
-    CustomLoggedHeaderComponent
+    CustomLoggedHeaderComponent,
+    CapitalizePipe
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseAppConfig, firebaseAuthConfig),
