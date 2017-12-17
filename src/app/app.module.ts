@@ -19,6 +19,7 @@ import { UserService } from '../providers/user/user.service';
 import { AuthService } from '../providers/auth/auth.service';
 import { AuthProviders, AuthMethods } from 'angularfire2';
 import { CustomLoggedHeaderComponent } from '../components/custom-logged-header/custom-logged-header';
+import { ChatService } from '../providers/chat/chat.service';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -61,7 +62,8 @@ const firebaseAuthConfig = {
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserService,
-    AuthService
+    AuthService,
+    ChatService
   ]
 })
 export class AppModule {}
