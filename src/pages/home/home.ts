@@ -88,4 +88,24 @@ export class HomePage {
       });
   }
 
+  filterItems(event: any): void {
+    let searchTerm: string = event.target.value;
+
+    this.chats = this.chatService.chats;
+    this.users = this.userService.users;
+
+    if (searchTerm) {
+      switch (this.view) {
+        case 'chats':
+          this.chats = <FirebaseListObservable<Chat[]>>this.chats
+            .map((chats: Chat[]) => chats.filter((chat: Chat) => (chat.title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1)));
+          break;
+        case 'users':
+          this.users = <FirebaseListObservable<User[]>>this.users
+            .map((users: User[]) => users.filter((user: User) => (user.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1)));
+          break;
+      }
+    }
+  }
+
 }
