@@ -23,6 +23,7 @@ import { ChatService } from '../providers/chat/chat.service';
 import { MessageService } from '../providers/message/message.service';
 import { MessageBoxComponent } from '../components/message-box/message-box';
 import { UserInfoComponent } from '../components/user-info/user-info';
+import { UserMenuComponent } from '../components/user-menu/user-menu';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -46,7 +47,8 @@ const firebaseAuthConfig = {
     CustomLoggedHeaderComponent,
     CapitalizePipe,
     MessageBoxComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    UserMenuComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseAppConfig, firebaseAuthConfig),
