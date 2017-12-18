@@ -1,3 +1,4 @@
+import { MenuController } from 'ionic-angular/components/menu/menu-controller';
 import { User } from './../../models/user.model';
 import { Chat } from './../../models/chat.model';
 import { AuthService } from './../../providers/auth/auth.service';
@@ -26,6 +27,7 @@ export class HomePage {
 
   constructor(public authService: AuthService,
     public chatService: ChatService,
+    public menuCtrl: MenuController,
     public navCtrl: NavController,
     public userService: UserService) {
 
@@ -38,6 +40,7 @@ export class HomePage {
   ionViewDidLoad() {
     this.chats = this.chatService.chats;
     this.users = this.userService.users;
+    this.menuCtrl.enable(true, 'user-menu');
   }
 
 
