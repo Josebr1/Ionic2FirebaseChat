@@ -13,6 +13,7 @@ export class UserProfilePage {
 
   currentUser: User;
   canEdit: boolean = false;
+  private filePhoto: File;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -34,6 +35,11 @@ export class UserProfilePage {
   onSubmit(event: Event): void {
     event.preventDefault();
     this.editUser();
+  }
+
+  onPhoto(event): void{
+    console.log(event.target.files);
+    this.filePhoto = event.target.files[0];
   }
 
   private editUser(photoUrl?: string): void {
