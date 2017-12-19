@@ -25,6 +25,7 @@ import { MessageService } from '../providers/message/message.service';
 import { MessageBoxComponent } from '../components/message-box/message-box';
 import { UserInfoComponent } from '../components/user-info/user-info';
 import { UserMenuComponent } from '../components/user-menu/user-menu';
+import { ProgressBarComponent } from '../components/progress-bar/progress-bar';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -50,7 +51,8 @@ const firebaseAuthConfig = {
     CapitalizePipe,
     MessageBoxComponent,
     UserInfoComponent,
-    UserMenuComponent
+    UserMenuComponent,
+    ProgressBarComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseAppConfig, firebaseAuthConfig),
