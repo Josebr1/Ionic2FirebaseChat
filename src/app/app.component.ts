@@ -1,3 +1,4 @@
+import { HomePage } from './../pages/home/home';
 import { FirebaseAuthState } from 'angularfire2';
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
@@ -13,7 +14,7 @@ import { User } from '../models/user.model';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any = SigninPage;
+  rootPage: any;
   currentUser: User;
 
   constructor(platform: Platform,
@@ -30,6 +31,10 @@ export class MyApp {
             .subscribe((user: User) => {
               this.currentUser = user;
             });
+
+          this.rootPage = HomePage;
+        } else {
+          this.rootPage = SigninPage;
         }
       });
 

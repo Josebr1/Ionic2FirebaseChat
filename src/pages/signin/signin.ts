@@ -71,18 +71,4 @@ export class SigninPage {
       buttons: ['OK']
     }).present();
   }
-
-  onHome(): void{
-    this.navCtrl.push(HomePage)
-    .then((hasAccess: boolean) => {
-      console.log('Autorizado: ', hasAccess);
-    }).catch(err => {
-      console.log('Não Autorizado: ', err);
-    });
-  }
-
-  onLogout(): void{
-    this.authService.logout();
-  }
-
 }

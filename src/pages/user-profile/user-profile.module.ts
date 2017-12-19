@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { IonicModule, IonicPageModule } from 'ionic-angular';
+import { IonicPageModule } from 'ionic-angular';
 import { UserProfilePage } from './user-profile';
 
 @NgModule({
