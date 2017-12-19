@@ -1,3 +1,4 @@
+import { UserProfilePage } from './../pages/user-profile/user-profile';
 import { ChatPage } from './../pages/chat/chat';
 import { CapitalizePipe } from './../pipes/capitalize.pipe';
 import { BrowserModule } from '@angular/platform-browser';
@@ -44,6 +45,7 @@ const firebaseAuthConfig = {
     SignupPage,
     SigninPage,
     ChatPage,
+    UserProfilePage,
     CustomLoggedHeaderComponent,
     CapitalizePipe,
     MessageBoxComponent,
@@ -62,7 +64,8 @@ const firebaseAuthConfig = {
     HomePage,
     SignupPage,
     SigninPage,
-    ChatPage
+    ChatPage,
+    UserProfilePage,
   ],
   providers: [
     StatusBar,
