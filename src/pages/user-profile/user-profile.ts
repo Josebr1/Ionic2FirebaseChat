@@ -34,7 +34,22 @@ export class UserProfilePage {
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    this.editUser();
+    
+    if(this.filePhoto){
+
+      let uploadTask = this.userService.uploadPhoto(this.filePhoto, this.currentUser.$key);
+
+      uploadTask.on('state_changed', (snapshot) => {
+
+      }, (error: Error) => {
+
+      }, () => {
+        this.editUser(uploadTask.snapshot.downloadURL);
+      });
+
+    }else{
+      this.editUser();
+    }
   }
 
   onPhoto(event): void{
@@ -50,6 +65,7 @@ export class UserProfilePage {
         photo: photoUrl || this.currentUser.photo || ''
       }).then(() => {
         this.canEdit = false;
+        this.filePhoto = undefined;
       });
   }
 }
