@@ -30,4 +30,20 @@ export class UserProfilePage {
         this.currentUser = user;
       });
   }
+
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    this.editUser();
+  }
+
+  private editUser(photoUrl?: string): void {
+    this.userService
+      .edit({
+        name: this.currentUser.name,
+        username: this.currentUser.username,
+        photo: photoUrl || this.currentUser.photo || ''
+      }).then(() => {
+        this.canEdit = false;
+      });
+  }
 }
