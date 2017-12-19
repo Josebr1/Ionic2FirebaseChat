@@ -13,6 +13,7 @@ export class UserProfilePage {
 
   currentUser: User;
   canEdit: boolean = false;
+  uploadProgress: number;
   private filePhoto: File;
 
   constructor(public navCtrl: NavController,
@@ -40,6 +41,7 @@ export class UserProfilePage {
       let uploadTask = this.userService.uploadPhoto(this.filePhoto, this.currentUser.$key);
 
       uploadTask.on('state_changed', (snapshot) => {
+        this.uploadProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
 
       }, (error: Error) => {
 
@@ -66,6 +68,7 @@ export class UserProfilePage {
       }).then(() => {
         this.canEdit = false;
         this.filePhoto = undefined;
+        this.uploadProgress = 0;
       });
   }
 }
