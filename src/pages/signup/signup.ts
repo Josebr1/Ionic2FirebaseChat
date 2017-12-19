@@ -1,6 +1,6 @@
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { AlertController, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../../providers/user/user.service';
@@ -10,7 +10,6 @@ import { FirebaseAuthState } from "angularfire2";
 
 import 'rxjs/add/operator/first';
 
-@IonicPage()
 @Component({
   selector: 'page-signup',
   templateUrl: 'signup.html',

@@ -1,11 +1,10 @@
 import { HomePage } from './../home/home';
 import { AuthService } from './../../providers/auth/auth.service';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignupPage } from '../signup/signup';
 
-@IonicPage()
 @Component({
   selector: 'page-signin',
   templateUrl: 'signin.html',
