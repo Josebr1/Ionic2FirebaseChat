@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthService } from '../../providers/auth/auth.service';
 import { User } from '../../models/user.model';
@@ -18,6 +18,7 @@ export class UserProfilePage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public cd: ChangeDetectorRef,
     public authService: AuthService,
     public userService: UserService) {
   }
@@ -41,7 +42,9 @@ export class UserProfilePage {
       let uploadTask = this.userService.uploadPhoto(this.filePhoto, this.currentUser.$key);
 
       uploadTask.on('state_changed', (snapshot) => {
+        
         this.uploadProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        this.cd.detectChanges();
 
       }, (error: Error) => {
 
@@ -69,6 +72,7 @@ export class UserProfilePage {
         this.canEdit = false;
         this.filePhoto = undefined;
         this.uploadProgress = 0;
+        this.cd.detectChanges();
       });
   }
 }
