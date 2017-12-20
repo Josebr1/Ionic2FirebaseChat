@@ -1,41 +1,44 @@
-import { AngularFireAuth, FirebaseAuthState } from 'angularfire2';
-
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { AngularFireAuth } from "angularfire2/auth";
+
+import { BaseService } from '../base/base.service';
+
+import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/map';
- 
-import { BaseService } from "../base/base.service";
- 
+
+import * as firebase from 'firebase/app';
+
 
 @Injectable()
 export class AuthService extends BaseService{
 
-  constructor(public auth: AngularFireAuth, public http: Http) {
+  constructor(public afAuth: AngularFireAuth) {
     super();
     console.log('Hello AuthProvider Provider');
   }
 
-  createAuthUser(user: {email: string, password: string}): firebase.Promise<FirebaseAuthState>{
-    return this.auth.createUser(user)
+  createAuthUser(user: {email: string, password: string}): Promise<firebase.User>{
+    return this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password)
       .catch(this.handlePromiseError);
   }
 
-  signinWithEmail(user: {email: string, password: string}): firebase.Promise<boolean>{
-    return this.auth.login(user)
-    .then((authState: FirebaseAuthState) => {
+  signinWithEmail(user: {email: string, password: string}): Promise<boolean>{
+    return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
+    .then((authState: firebase.User) => {
       return authState != null;
     }).catch(this.handlePromiseError);
   }
 
-  logout(): Promise<void>{
-    return this.auth.logout();
+  logout(): Promise<any>{
+    return this.afAuth.auth.signOut();
   }
 
   get authenticated(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.auth
+      this.afAuth
+        .authState
         .first()
-        .subscribe((authState: FirebaseAuthState) => {
+        .subscribe((authState: firebase.User) => {
            (authState) ? resolve(true) : reject(false);
         });
       });

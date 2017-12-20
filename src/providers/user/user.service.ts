@@ -1,78 +1,73 @@
-import { FirebaseAuthState, FirebaseListObservable } from 'angularfire2';
-import { User } from './../../models/user.model';
-import { Injectable, Inject } from '@angular/core';
-import { Http } from '@angular/http';
-
-import { AngularFire } from 'angularfire2';
-
-import { BaseService } from '../base/base.service';
+import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import { FirebaseObjectObservable } from 'angularfire2/database';
-import { FirebaseApp } from 'angularfire2';
+
+import { FirebaseApp } from "angularfire2";
+import { AngularFireAuth } from "angularfire2/auth";
+import { AngularFireDatabase, AngularFireObject } from "angularfire2/database";
+
+import { BaseService } from "../base/base.service";
+import { User } from "../../models/user.model";
+
+import * as firebase from 'firebase/app';
+import 'firebase/storage';
 
 @Injectable()
 export class UserService extends BaseService {
 
-  users: FirebaseListObservable<User[]>;
-  currentUser: FirebaseObjectObservable<User>;
+  users: Observable<User[]>;
+  currentUser: AngularFireObject<User>;
 
-  constructor(public af: AngularFire,
-    @Inject(FirebaseApp) public firebaseApp: any,
-    public http: Http) {
+  constructor(public afAuth: AngularFireAuth,
+              public db: AngularFireDatabase,
+              public firebaseApp: FirebaseApp,) {
     super();
     console.log('Hello UserProvider Provider');
     this.listenAuthState();
   }
 
   private setUsers(uidToExclude: string): void {
-    this.users = <FirebaseListObservable<User[]>>this.af.database.list(`/users`, {
-      query: {
-        orderByChild: 'name'
-      }
-    }).map((users: User[]) => {
+    this.users = this.mapListKeys<User>(
+      this.db.list<User>(`/users`,
+        (ref: firebase.database.Reference) => ref.orderByChild('name'))
+    ).map((users: User[]) => {
       return users.filter((user: User) => user.$key !== uidToExclude)
     });
   }
 
   private listenAuthState(): void {
-    this.af.auth
-      .subscribe((authState: FirebaseAuthState) => {
-        if (authState) {
+    this.afAuth.authState
+      .subscribe((authUser: firebase.User) => {
+        if (authUser) {
           console.log('Auth state alterado!');
-          this.currentUser = this.af.database.object(`/users/${authState.auth.uid}`);
-          this.setUsers(authState.auth.uid);
+          this.currentUser = this.db.object(`/users/${authUser.uid}`);
+          this.setUsers(authUser.uid);
         }
       });
   }
 
-  create(user: User, uuid: string): firebase.Promise<void> {
-    return this.af.database.object(`/users/${uuid}`)
+  create(user: User, uuid: string): Promise<void> {
+    return this.db.object(`/users/${uuid}`)
       .set(user)
       .catch(this.handlePromiseError);
   }
 
-  edit(user: { name: string, username: string, photo: string }): firebase.Promise<void> {
+  edit(user: { name: string, username: string, photo: string }): Promise<void> {
     return this.currentUser
       .update(user)
       .catch(this.handlePromiseError);
   }
 
   userExists(userName: string): Observable<boolean> {
-    return this.af.database.list(`/users`, {
-      query: {
-        orderByChild: 'username',
-        equalTo: userName
-      }
-    }).map((users: User[]) => {
-      return users.length > 0;
-    }).catch(this.handleObservableError);
+    return this.db.list(`/users`, (ref: firebase.database.Reference) => ref.orderByChild('name').equalTo(userName))
+      .valueChanges()
+      .map((users: User[]) => {
+        return users.length > 0;
+      }).catch(this.handleObservableError);
   }
 
-  get(userId: string): FirebaseObjectObservable<User> {
-    return <FirebaseObjectObservable<User>>this.af.database.object(`/users/${userId}`)
-      .catch(this.handleObservableError);
+  get(userId: string): AngularFireObject<User> {
+    return this.db.object<User>(`/users/${userId}`);
   }
 
   uploadPhoto(file: File, userId: string): firebase.storage.UploadTask {
@@ -82,5 +77,4 @@ export class UserService extends BaseService {
       .child(`/users/${userId}`)
       .put(file);
   }
-
 }

@@ -1,5 +1,4 @@
-import { HomePage } from './../pages/home/home';
-import { FirebaseAuthState } from 'angularfire2';
+import { HomePage } from '../pages/home/home';
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -10,6 +9,8 @@ import { AuthService } from '../providers/auth/auth.service';
 import { UserService } from '../providers/user/user.service';
 import { User } from '../models/user.model';
 
+import * as firebase from 'firebase/app';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -18,16 +19,19 @@ export class MyApp {
   currentUser: User;
 
   constructor(platform: Platform,
-    statusBar: StatusBar,
-    splashScreen: SplashScreen,
-    authService: AuthService,
-    userService: UserService) {
+              statusBar: StatusBar,
+              splashScreen: SplashScreen,
+              authService: AuthService,
+              userService: UserService) {
 
     authService
-      .auth
-      .subscribe((authState: FirebaseAuthState) => {
+      .afAuth
+      .authState
+      .subscribe((authState: firebase.User) => {
         if (authState) {
+
           userService.currentUser
+            .valueChanges()
             .subscribe((user: User) => {
               this.currentUser = user;
             });

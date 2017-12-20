@@ -1,8 +1,12 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { AuthService } from '../../providers/auth/auth.service';
+
 import { User } from '../../models/user.model';
-import { UserService } from '../../providers/user/user.service';
+
+import {AuthService} from "../../providers/auth/auth.service";
+import {UserService} from "../../providers/user/user.service";
+
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'page-user-profile',
@@ -28,6 +32,7 @@ export class UserProfilePage {
 
   ionViewDidLoad() {
     this.userService.currentUser
+      .valueChanges()
       .subscribe((user: User) => {
         this.currentUser = user;
       });
@@ -35,14 +40,15 @@ export class UserProfilePage {
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    
+
     if(this.filePhoto){
 
       let uploadTask = this.userService.uploadPhoto(this.filePhoto, this.currentUser.$key);
 
-      uploadTask.on('state_changed', (snapshot) => {
-        
+      uploadTask.on('state_changed', (snapshot: firebase.storage.UploadTaskSnapshot) => {
+
         this.uploadProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+
         this.cd.detectChanges();
 
       }, (error: Error) => {

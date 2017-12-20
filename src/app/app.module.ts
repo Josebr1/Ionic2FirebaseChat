@@ -1,31 +1,34 @@
-import { UserProfilePage } from './../pages/user-profile/user-profile';
-import { ChatPage } from './../pages/chat/chat';
-import { CapitalizePipe } from './../pipes/capitalize.pipe';
-import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { AngularFireModule, FirebaseAppConfig } from 'angularfire2/angularfire2';
-
-import { HttpModule } from '@angular/http';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 
 import { MyApp } from './app.component';
+import { ChatPage } from '../pages/chat/chat';
 import { HomePage } from '../pages/home/home';
 import { SignupPage } from '../pages/signup/signup';
-import { SigninPage } from './../pages/signin/signin';
+import { SigninPage } from '../pages/signin/signin';
+import { UserProfilePage } from '../pages/user-profile/user-profile';
 
-import { UserService } from '../providers/user/user.service';
-import { AuthService } from '../providers/auth/auth.service';
-import { AuthProviders, AuthMethods } from 'angularfire2';
 import { CustomLoggedHeaderComponent } from '../components/custom-logged-header/custom-logged-header';
-import { ChatService } from '../providers/chat/chat.service';
-import { MessageService } from '../providers/message/message.service';
 import { MessageBoxComponent } from '../components/message-box/message-box';
 import { UserInfoComponent } from '../components/user-info/user-info';
 import { UserMenuComponent } from '../components/user-menu/user-menu';
 import { ProgressBarComponent } from '../components/progress-bar/progress-bar';
+
+import { AuthService } from '../providers/auth/auth.service';
+import { ChatService } from '../providers/chat/chat.service';
+import { MessageService } from '../providers/message/message.service';
+import { UserService } from '../providers/user/user.service';
+
+import {CapitalizePipe} from '../pipes/capitalize.pipe';
+
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyBa5gcDij3VODKo8va7RmSjfZdqPTinZ6I",
@@ -34,39 +37,36 @@ const firebaseAppConfig: FirebaseAppConfig = {
   storageBucket: "ionic2-firebase-chat-38a04.appspot.com",
 };
 
-const firebaseAuthConfig = {
-  provider: AuthProviders.Custom,
-  method: AuthMethods.Password
-}
-
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
+    ChatPage,
     SignupPage,
     SigninPage,
-    ChatPage,
     UserProfilePage,
     CustomLoggedHeaderComponent,
-    CapitalizePipe,
     MessageBoxComponent,
     UserInfoComponent,
     UserMenuComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    CapitalizePipe,
   ],
   imports: [
-    AngularFireModule.initializeApp(firebaseAppConfig, firebaseAuthConfig),
+    AngularFireModule.initializeApp(firebaseAppConfig),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    ChatPage,
     HomePage,
     SignupPage,
     SigninPage,
-    ChatPage,
     UserProfilePage,
   ],
   providers: [
@@ -79,4 +79,5 @@ const firebaseAuthConfig = {
     MessageService
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

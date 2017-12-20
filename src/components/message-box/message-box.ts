@@ -1,4 +1,4 @@
-import { Message } from './../../models/message.model';
+import { Message } from '../../models/message.model';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -15,7 +15,7 @@ export class MessageBoxComponent {
   @Input() isFromSender: boolean;
 
   constructor() {
-    
+
   }
 
 }

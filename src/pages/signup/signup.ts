@@ -1,4 +1,4 @@
-import { HomePage } from './../home/home';
+import { HomePage } from '../home/home';
 import { Component } from '@angular/core';
 import { AlertController, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -6,9 +6,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../providers/user/user.service';
 import { AuthService } from '../../providers/auth/auth.service';
 
-import { FirebaseAuthState } from "angularfire2";
-
 import 'rxjs/add/operator/first';
+
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'page-signup',
@@ -55,10 +55,10 @@ export class SignupPage {
           this.authService.createAuthUser({
             email: formUser.email,
             password: formUser.password
-          }).then((authSate: FirebaseAuthState) => {
+          }).then((authSate: firebase.User) => {
 
             delete formUser.password;
-            let uuid: string = authSate.auth.uid;
+            let uuid: string = authSate.uid;
 
             this.userService.create(formUser, uuid)
               .then(() => {

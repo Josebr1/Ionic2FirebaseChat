@@ -1,7 +1,6 @@
-import { MenuController } from 'ionic-angular/components/menu/menu-controller';
 import { App } from 'ionic-angular/components/app/app';
-import { AuthService } from './../../providers/auth/auth.service';
-import { AlertController } from 'ionic-angular';
+import { AuthService } from '../../providers/auth/auth.service';
+import { AlertController, MenuController } from 'ionic-angular';
 import { Component, Input } from '@angular/core';
 import { BaseComponent } from '../base.component';
 import { User } from '../../models/user.model';
@@ -21,7 +20,7 @@ export class CustomLoggedHeaderComponent extends BaseComponent{
     public menuCtrl: MenuController) {
 
     super(alertCtrl, authService, app, menuCtrl);
-    
+
   }
 
 }
